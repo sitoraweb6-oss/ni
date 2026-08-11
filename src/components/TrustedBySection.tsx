@@ -60,7 +60,7 @@ const LogoCard = ({ logo, darkMode }: { logo: { id: number, src: string, alt: st
       style={{ height: 'var(--item-height)', paddingBottom: 'var(--gap)' }}
     >
       <div 
-        className={`group relative w-full h-full flex items-center justify-center border transition-all duration-300 z-10 ${darkMode ? 'bg-[#0A0A0A] border-[#D6B16B]/20 shadow-[0_0_15px_rgba(214,177,107,0.04)] hover:border-[#D6B16B]/50 hover:shadow-[0_0_25px_rgba(214,177,107,0.15)]' : 'bg-white border-[#D6B16B]/30 shadow-sm hover:border-[#D6B16B]/60 hover:shadow-[0_0_15px_rgba(214,177,107,0.1)]'}`}
+        className={`group relative overflow-hidden w-full h-full flex items-center justify-center border transition-all duration-300 z-10 ${darkMode ? 'bg-[#0A0A0A] border-[#D6B16B]/70 shadow-[0_0_15px_rgba(214,177,107,0.04)] hover:border-[#D6B16B]/100 hover:shadow-[0_0_25px_rgba(214,177,107,0.15)]' : 'bg-white border-[#D6B16B]/70 shadow-sm hover:border-[#D6B16B]/100 hover:shadow-[0_0_15px_rgba(214,177,107,0.1)]'}`}
         style={{ padding: 'var(--card-padding)', borderRadius: 'var(--card-radius)' }}
       >
         <img 
@@ -84,9 +84,10 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
         #trusted-by {
           --card-width: clamp(85px, 25vw, 105px);
           --card-height: calc(var(--card-width) * 1.04);
-          --gap: clamp(8px, 2vw, 12px);
-          --card-padding: clamp(4px, 1.5vw, 6px);
-          --card-radius: 10px;
+          --gap: clamp(10px, 2vw, 12px);
+          --column-gap: clamp(14px, 2vw, 16px);
+          --card-padding: 4px;
+          --card-radius: 14px;
           --item-height: calc(var(--card-height) + var(--gap));
           --viewport-height: calc(3 * var(--card-height) + 2 * var(--gap));
         }
@@ -94,9 +95,10 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
           #trusted-by {
             --card-width: clamp(125px, 18vw, 145px);
             --card-height: calc(var(--card-width) * 1.04);
-            --gap: clamp(12px, 1.5vw, 15px);
-            --card-padding: clamp(5px, 1vw, 8px);
-            --card-radius: 12px;
+            --gap: 14px;
+            --column-gap: 18px;
+            --card-padding: 5px;
+            --card-radius: 16px;
           }
         }
         @media (min-width: 1024px) {
@@ -104,8 +106,9 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
             --card-width: 154px;
             --card-height: 160px;
             --gap: 16px;
-            --card-padding: 8px;
-            --card-radius: 14px;
+            --column-gap: 20px;
+            --card-padding: 6px;
+            --card-radius: 18px;
           }
         }
         
@@ -144,7 +147,7 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 lg:items-center">
           
           {/* LEFT SIDE: 3 INDEPENDENT COLUMNS */}
-          <div className="grid grid-cols-3 justify-center mx-auto w-fit" style={{ gap: 'var(--gap)' }}>
+          <div className="grid grid-cols-3 justify-center mx-auto w-fit" style={{ gap: 'var(--column-gap)' }}>
             
             {/* Column 1 Viewport */}
             <div className="overflow-hidden relative flex-shrink-0" style={{ width: 'var(--card-width)', height: 'var(--viewport-height)', borderRadius: 'var(--card-radius)' }}>
