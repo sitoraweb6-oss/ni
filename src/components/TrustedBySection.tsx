@@ -13,13 +13,21 @@ interface TrustedBySectionProps {
   onOpenInquiry?: (type?: string) => void;
 }
 
+const uploadedFiles = [
+  "eee.webp",
+  "eter.webp",
+  "rterf.webp",
+  "werfe.webp"
+];
+
+// Generate exactly 21 logo slots mapped to the available real files
 const clientLogos = Array.from({ length: 21 }, (_, i) => {
   const id = i + 1;
-  const numStr = id.toString().padStart(2, '0');
+  const filename = uploadedFiles[i % uploadedFiles.length];
   return {
     id,
-    src: `/logos/logo-${numStr}.png`,
-    alt: `Sitora Web Client ${numStr}`
+    src: `/logos/${filename}`,
+    alt: `Sitora Web Client ${id}`
   };
 });
 
@@ -41,7 +49,7 @@ const LogoCard = ({ logo, darkMode }: { logo: { id: number, src: string, alt: st
             src={logo.src} 
             alt={logo.alt} 
             onError={() => setError(true)}
-            className="w-full h-full object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
+            className="w-full h-full object-contain opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
           />
         ) : (
           <div className={`w-full h-full flex items-center justify-center opacity-10 ${darkMode ? 'text-neutral-500' : 'text-neutral-400'}`}>
