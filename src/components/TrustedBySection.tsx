@@ -7,44 +7,48 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Globe, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
+import logoManifest from '../logoManifest.json';
 
 interface TrustedBySectionProps {
   darkMode: boolean;
   onOpenInquiry?: (type?: string) => void;
 }
 
-const uploadedFiles = [
-  "Black Yellow Minimalist Optic Logo.webp",
-  "Black and Orange Simple Chinese Restaurant Logo.webp",
-  "Black and Yellow Taxi Company Logo.webp",
-  "Blue Green.webp",
-  "Blue and Black.webp",
-  "Blue and White Modern Academy Logo.webp",
-  "Brown.webp",
-  "Brown Minimalist Fashion Brand Logo.webp",
-  "Farm Logo.webp",
-  "Gold and Green.webp",
-  "Green Minimalist Real Estate Logo.webp",
-  "Green and Black Modern Bold Car Center Brand Logo.webp",
-  "Maroon andogo.webp",
-  "Navy and .webp",
-  "Navy and Red Modern University Logo.webp"
-];
+const getLogosFromManifest = () => {
+  if (Array.isArray(logoManifest) && logoManifest.length > 0) {
+    return logoManifest.map((path) => {
+      const parts = path.split('/');
+      const filename = parts.pop() || '';
+      return `${parts.join('/')}/${encodeURIComponent(filename)}`;
+    });
+  }
+  return [];
+};
 
-// Generate exactly 21 logo slots mapped to the available real files
-const clientLogos = Array.from({ length: 21 }, (_, i) => {
-  const id = i + 1;
-  const filename = uploadedFiles[i % uploadedFiles.length];
-  return {
-    id,
-    src: `/logos/${encodeURIComponent(filename)}`,
-    alt: `Sitora Web Client ${id}`
-  };
-});
+const uploadedFiles = getLogosFromManifest();
+const totalToUse = Math.min(uploadedFiles.length, 21);
+const uniqueLogos = uploadedFiles.slice(0, totalToUse).map((src, i) => ({
+  id: i + 1,
+  src,
+  alt: `Sitora Web Client ${i + 1}`
+}));
 
-const column1Logos = clientLogos.slice(0, 7);
-const column2Logos = clientLogos.slice(7, 14);
-const column3Logos = clientLogos.slice(14, 21);
+// Distribute evenly across 3 columns
+const chunkSize = Math.ceil(uniqueLogos.length / 3) || 1;
+const column1Logos = uniqueLogos.slice(0, chunkSize);
+const column2Logos = uniqueLogos.slice(chunkSize, chunkSize * 2);
+const column3Logos = uniqueLogos.slice(chunkSize * 2, uniqueLogos.length);
+
+const renderTrackLogos = (logos: typeof uniqueLogos) => {
+  if (logos.length === 0) return [];
+  // Ensure the base track has enough items to fill the viewport (at least 4) 
+  // so that the duplicated track covers the full height.
+  let baseLogos = [...logos];
+  while (baseLogos.length < 4) {
+    baseLogos = [...baseLogos, ...logos];
+  }
+  return [...baseLogos, ...baseLogos];
+};
 
 const LogoCard = ({ logo, darkMode }: { logo: { id: number, src: string, alt: string }, darkMode: boolean }) => {
   // Use the first file as a guaranteed fallback if the specific one fails
@@ -62,7 +66,7 @@ const LogoCard = ({ logo, darkMode }: { logo: { id: number, src: string, alt: st
         <img 
           src={imgSrc} 
           alt={logo.alt} 
-          onError={() => setImgSrc(`/logos/${encodeURIComponent(uploadedFiles[0])}`)}
+          onError={() => setImgSrc(uploadedFiles[0] || '')}
           className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.02] relative z-20"
           style={{ filter: 'none', opacity: 1 }}
         />
@@ -140,12 +144,12 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 lg:items-center">
           
           {/* LEFT SIDE: 3 INDEPENDENT COLUMNS */}
-          <div className="flex justify-center mx-auto w-full" style={{ gap: 'var(--gap)' }}>
+          <div className="grid grid-cols-3 justify-center mx-auto w-fit" style={{ gap: 'var(--gap)' }}>
             
             {/* Column 1 Viewport */}
             <div className="overflow-hidden relative flex-shrink-0" style={{ width: 'var(--card-width)', height: 'var(--viewport-height)', borderRadius: 'var(--card-radius)' }}>
               <div className="flex flex-col w-full animate-reel-up-1">
-                {[...column1Logos, ...column1Logos].map((logo, i) => (
+                {renderTrackLogos(column1Logos).map((logo, i) => (
                   <LogoCard key={`col1-${i}`} logo={logo} darkMode={darkMode} />
                 ))}
               </div>
@@ -154,7 +158,7 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
             {/* Column 2 Viewport */}
             <div className="overflow-hidden relative flex-shrink-0" style={{ width: 'var(--card-width)', height: 'var(--viewport-height)', borderRadius: 'var(--card-radius)' }}>
               <div className="flex flex-col w-full animate-reel-down-2">
-                {[...column2Logos, ...column2Logos].map((logo, i) => (
+                {renderTrackLogos(column2Logos).map((logo, i) => (
                   <LogoCard key={`col2-${i}`} logo={logo} darkMode={darkMode} />
                 ))}
               </div>
@@ -163,7 +167,7 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
             {/* Column 3 Viewport */}
             <div className="overflow-hidden relative flex-shrink-0" style={{ width: 'var(--card-width)', height: 'var(--viewport-height)', borderRadius: 'var(--card-radius)' }}>
               <div className="flex flex-col w-full animate-reel-up-3">
-                {[...column3Logos, ...column3Logos].map((logo, i) => (
+                {renderTrackLogos(column3Logos).map((logo, i) => (
                   <LogoCard key={`col3-${i}`} logo={logo} darkMode={darkMode} />
                 ))}
               </div>
