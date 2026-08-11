@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="60" viewBox="0 0 160 60">
+  <rect width="160" height="60" rx="8" fill="#e5e5e5" fill-opacity="0.2"/>
+  <text x="80" y="30" font-family="monospace" font-size="14" fill="#888" text-anchor="middle" dominant-baseline="middle">LOGO 0{1..6}</text>
+</svg>
