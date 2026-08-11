@@ -43,16 +43,17 @@ const LogoCard = ({ logo, darkMode }: { logo: { id: number, src: string, alt: st
       className="w-full flex-shrink-0"
       style={{ height: 'var(--item-height)', paddingBottom: 'var(--gap)' }}
     >
-      <div className={`w-full h-full flex items-center justify-center p-4 sm:p-6 rounded-xl border ${darkMode ? 'bg-neutral-900/40 border-neutral-800/80' : 'bg-white border-neutral-200 shadow-sm'}`}>
+      <div className={`group relative w-full h-full flex items-center justify-center p-2 sm:p-3 rounded-2xl border transition-all duration-300 z-10 ${darkMode ? 'bg-[#0A0A0A] border-[#D6B16B]/20 shadow-[0_0_15px_rgba(214,177,107,0.04)] hover:border-[#D6B16B]/50 hover:shadow-[0_0_25px_rgba(214,177,107,0.15)]' : 'bg-white border-[#D6B16B]/30 shadow-sm hover:border-[#D6B16B]/60 hover:shadow-[0_0_15px_rgba(214,177,107,0.1)]'}`}>
         {!error ? (
           <img 
             src={logo.src} 
             alt={logo.alt} 
             onError={() => setError(true)}
-            className="w-full h-full object-contain opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
+            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.02] relative z-20"
+            style={{ filter: 'none', opacity: 1 }}
           />
         ) : (
-          <div className={`w-full h-full flex items-center justify-center opacity-10 ${darkMode ? 'text-neutral-500' : 'text-neutral-400'}`}>
+          <div className={`w-full h-full flex items-center justify-center opacity-20 relative z-20 ${darkMode ? 'text-[#D6B16B]' : 'text-neutral-400'}`}>
             <span className="text-[10px] font-mono font-bold tracking-widest">{logo.id.toString().padStart(2, '0')}</span>
           </div>
         )}
