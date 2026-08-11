@@ -55,7 +55,10 @@ const LogoCard = ({ logo, darkMode }: { logo: { id: number, src: string, alt: st
       className="w-full flex-shrink-0"
       style={{ height: 'var(--item-height)', paddingBottom: 'var(--gap)' }}
     >
-      <div className={`group relative w-full h-full flex items-center justify-center p-2 sm:p-3 rounded-2xl border transition-all duration-300 z-10 ${darkMode ? 'bg-[#0A0A0A] border-[#D6B16B]/20 shadow-[0_0_15px_rgba(214,177,107,0.04)] hover:border-[#D6B16B]/50 hover:shadow-[0_0_25px_rgba(214,177,107,0.15)]' : 'bg-white border-[#D6B16B]/30 shadow-sm hover:border-[#D6B16B]/60 hover:shadow-[0_0_15px_rgba(214,177,107,0.1)]'}`}>
+      <div 
+        className={`group relative w-full h-full flex items-center justify-center border transition-all duration-300 z-10 ${darkMode ? 'bg-[#0A0A0A] border-[#D6B16B]/20 shadow-[0_0_15px_rgba(214,177,107,0.04)] hover:border-[#D6B16B]/50 hover:shadow-[0_0_25px_rgba(214,177,107,0.15)]' : 'bg-white border-[#D6B16B]/30 shadow-sm hover:border-[#D6B16B]/60 hover:shadow-[0_0_15px_rgba(214,177,107,0.1)]'}`}
+        style={{ padding: 'var(--card-padding)', borderRadius: 'var(--card-radius)' }}
+      >
         <img 
           src={imgSrc} 
           alt={logo.alt} 
@@ -75,15 +78,30 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
     <section id="trusted-by" className={`relative w-full py-24 sm:py-32 overflow-hidden ${darkMode ? 'bg-[#05070A]' : 'bg-[#FAFBFC]'}`}>
       <style>{`
         #trusted-by {
-          --card-height: 80px;
-          --gap: 16px;
+          --card-width: clamp(85px, 25vw, 105px);
+          --card-height: calc(var(--card-width) * 1.04);
+          --gap: clamp(8px, 2vw, 12px);
+          --card-padding: clamp(4px, 1.5vw, 6px);
+          --card-radius: 10px;
           --item-height: calc(var(--card-height) + var(--gap));
           --viewport-height: calc(3 * var(--card-height) + 2 * var(--gap));
         }
-        @media (min-width: 640px) {
+        @media (min-width: 768px) {
           #trusted-by {
-            --card-height: 120px;
-            --gap: 20px;
+            --card-width: clamp(125px, 18vw, 145px);
+            --card-height: calc(var(--card-width) * 1.04);
+            --gap: clamp(12px, 1.5vw, 15px);
+            --card-padding: clamp(5px, 1vw, 8px);
+            --card-radius: 12px;
+          }
+        }
+        @media (min-width: 1024px) {
+          #trusted-by {
+            --card-width: 154px;
+            --card-height: 160px;
+            --gap: 16px;
+            --card-padding: 8px;
+            --card-radius: 14px;
           }
         }
         
@@ -122,10 +140,10 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 lg:items-center">
           
           {/* LEFT SIDE: 3 INDEPENDENT COLUMNS */}
-          <div className="grid grid-cols-3 gap-4 sm:gap-6 w-full">
+          <div className="flex justify-center mx-auto w-full" style={{ gap: 'var(--gap)' }}>
             
             {/* Column 1 Viewport */}
-            <div className="w-full overflow-hidden relative rounded-xl" style={{ height: 'var(--viewport-height)' }}>
+            <div className="overflow-hidden relative flex-shrink-0" style={{ width: 'var(--card-width)', height: 'var(--viewport-height)', borderRadius: 'var(--card-radius)' }}>
               <div className="flex flex-col w-full animate-reel-up-1">
                 {[...column1Logos, ...column1Logos].map((logo, i) => (
                   <LogoCard key={`col1-${i}`} logo={logo} darkMode={darkMode} />
@@ -134,7 +152,7 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
             </div>
             
             {/* Column 2 Viewport */}
-            <div className="w-full overflow-hidden relative rounded-xl" style={{ height: 'var(--viewport-height)' }}>
+            <div className="overflow-hidden relative flex-shrink-0" style={{ width: 'var(--card-width)', height: 'var(--viewport-height)', borderRadius: 'var(--card-radius)' }}>
               <div className="flex flex-col w-full animate-reel-down-2">
                 {[...column2Logos, ...column2Logos].map((logo, i) => (
                   <LogoCard key={`col2-${i}`} logo={logo} darkMode={darkMode} />
@@ -143,7 +161,7 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
             </div>
             
             {/* Column 3 Viewport */}
-            <div className="w-full overflow-hidden relative rounded-xl" style={{ height: 'var(--viewport-height)' }}>
+            <div className="overflow-hidden relative flex-shrink-0" style={{ width: 'var(--card-width)', height: 'var(--viewport-height)', borderRadius: 'var(--card-radius)' }}>
               <div className="flex flex-col w-full animate-reel-up-3">
                 {[...column3Logos, ...column3Logos].map((logo, i) => (
                   <LogoCard key={`col3-${i}`} logo={logo} darkMode={darkMode} />
