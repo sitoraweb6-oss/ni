@@ -18,7 +18,7 @@ const clientLogos = Array.from({ length: 21 }, (_, i) => {
   const numStr = id.toString().padStart(2, '0');
   return {
     id,
-    src: `/logos/client-${numStr}/logo.png`,
+    src: `/logos/logo-${numStr}.png`,
     alt: `Sitora Web Client ${numStr}`
   };
 });
@@ -31,19 +31,24 @@ const LogoCard = ({ logo, darkMode }: { logo: { id: number, src: string, alt: st
   const [error, setError] = useState(false);
 
   return (
-    <div className={`h-[80px] sm:h-[120px] w-full flex-shrink-0 flex items-center justify-center p-4 sm:p-6 rounded-xl border ${darkMode ? 'bg-neutral-900/30 border-neutral-800' : 'bg-white border-neutral-200 shadow-sm'}`}>
-      {!error ? (
-        <img 
-          src={logo.src} 
-          alt={logo.alt} 
-          onError={() => setError(true)}
-          className="w-full h-full object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
-        />
-      ) : (
-        <div className={`w-full h-full flex items-center justify-center opacity-20 ${darkMode ? 'text-neutral-500' : 'text-neutral-400'}`}>
-          <span className="text-xs font-mono font-bold tracking-widest">{logo.id.toString().padStart(2, '0')}</span>
-        </div>
-      )}
+    <div 
+      className="w-full flex-shrink-0"
+      style={{ height: 'var(--item-height)', paddingBottom: 'var(--gap)' }}
+    >
+      <div className={`w-full h-full flex items-center justify-center p-4 sm:p-6 rounded-xl border ${darkMode ? 'bg-neutral-900/40 border-neutral-800/80' : 'bg-white border-neutral-200 shadow-sm'}`}>
+        {!error ? (
+          <img 
+            src={logo.src} 
+            alt={logo.alt} 
+            onError={() => setError(true)}
+            className="w-full h-full object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
+          />
+        ) : (
+          <div className={`w-full h-full flex items-center justify-center opacity-10 ${darkMode ? 'text-neutral-500' : 'text-neutral-400'}`}>
+            <span className="text-[10px] font-mono font-bold tracking-widest">{logo.id.toString().padStart(2, '0')}</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -54,23 +59,43 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
   return (
     <section id="trusted-by" className={`relative w-full py-24 sm:py-32 overflow-hidden ${darkMode ? 'bg-[#05070A]' : 'bg-[#FAFBFC]'}`}>
       <style>{`
+        #trusted-by {
+          --card-height: 80px;
+          --gap: 16px;
+          --item-height: calc(var(--card-height) + var(--gap));
+          --viewport-height: calc(3 * var(--card-height) + 2 * var(--gap));
+        }
+        @media (min-width: 640px) {
+          #trusted-by {
+            --card-height: 120px;
+            --gap: 20px;
+          }
+        }
+        
+        /* 
+          14 items total (7 original + 7 duplicated).
+          We translate exactly 50% to create a seamless continuous loop.
+        */
         @keyframes reel-up {
           0% { transform: translateY(0); }
           100% { transform: translateY(-50%); }
         }
+        
         @keyframes reel-down {
           0% { transform: translateY(-50%); }
           100% { transform: translateY(0); }
         }
+        
         .animate-reel-up-1 {
-          animation: reel-up 18s linear infinite;
+          animation: reel-up 22s linear infinite;
         }
         .animate-reel-down-2 {
-          animation: reel-down 22s linear infinite;
+          animation: reel-down 26s linear infinite;
         }
         .animate-reel-up-3 {
-          animation: reel-up 20s linear infinite;
+          animation: reel-up 24s linear infinite;
         }
+        
         @media (prefers-reduced-motion: reduce) {
           .animate-reel-up-1, .animate-reel-down-2, .animate-reel-up-3 {
             animation-play-state: paused;
@@ -81,46 +106,36 @@ export const TrustedBySection: React.FC<TrustedBySectionProps> = ({ darkMode, on
       <div className="w-full max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 lg:items-center">
           
-          {/* LEFT SIDE: LOGO SHOWCASE */}
-          {/* Height is exactly 3 * (cardHeight + paddingBottom). 
-              Mobile: 3 * (80 + 12) = 276px 
-              Desktop: 3 * (120 + 20) = 420px 
-          */}
-          <div className="relative w-full h-[276px] sm:h-[420px] overflow-hidden">
-            {/* Top/Bottom Fade Masks */}
-            <div className={`absolute top-0 left-0 w-full h-16 sm:h-24 z-10 bg-gradient-to-b ${darkMode ? 'from-[#05070A] to-transparent' : 'from-[#FAFBFC] to-transparent'} pointer-events-none`}></div>
-            <div className={`absolute bottom-0 left-0 w-full h-16 sm:h-24 z-10 bg-gradient-to-t ${darkMode ? 'from-[#05070A] to-transparent' : 'from-[#FAFBFC] to-transparent'} pointer-events-none`}></div>
+          {/* LEFT SIDE: 3 INDEPENDENT COLUMNS */}
+          <div className="grid grid-cols-3 gap-4 sm:gap-6 w-full">
             
-            <div className="grid grid-cols-3 gap-3 sm:gap-5 h-full relative" aria-hidden="true">
-              
-              {/* Column 1: Upward */}
-              <div className="flex flex-col animate-reel-up-1">
+            {/* Column 1 Viewport */}
+            <div className="w-full overflow-hidden relative rounded-xl" style={{ height: 'var(--viewport-height)' }}>
+              <div className="flex flex-col w-full animate-reel-up-1">
                 {[...column1Logos, ...column1Logos].map((logo, i) => (
-                  <div key={`col1-${i}`} className="pb-3 sm:pb-5">
-                    <LogoCard logo={logo} darkMode={darkMode} />
-                  </div>
+                  <LogoCard key={`col1-${i}`} logo={logo} darkMode={darkMode} />
                 ))}
               </div>
-
-              {/* Column 2: Downward */}
-              <div className="flex flex-col animate-reel-down-2">
-                {[...column2Logos, ...column2Logos].map((logo, i) => (
-                  <div key={`col2-${i}`} className="pb-3 sm:pb-5">
-                    <LogoCard logo={logo} darkMode={darkMode} />
-                  </div>
-                ))}
-              </div>
-
-              {/* Column 3: Upward */}
-              <div className="flex flex-col animate-reel-up-3">
-                {[...column3Logos, ...column3Logos].map((logo, i) => (
-                  <div key={`col3-${i}`} className="pb-3 sm:pb-5">
-                    <LogoCard logo={logo} darkMode={darkMode} />
-                  </div>
-                ))}
-              </div>
-
             </div>
+            
+            {/* Column 2 Viewport */}
+            <div className="w-full overflow-hidden relative rounded-xl" style={{ height: 'var(--viewport-height)' }}>
+              <div className="flex flex-col w-full animate-reel-down-2">
+                {[...column2Logos, ...column2Logos].map((logo, i) => (
+                  <LogoCard key={`col2-${i}`} logo={logo} darkMode={darkMode} />
+                ))}
+              </div>
+            </div>
+            
+            {/* Column 3 Viewport */}
+            <div className="w-full overflow-hidden relative rounded-xl" style={{ height: 'var(--viewport-height)' }}>
+              <div className="flex flex-col w-full animate-reel-up-3">
+                {[...column3Logos, ...column3Logos].map((logo, i) => (
+                  <LogoCard key={`col3-${i}`} logo={logo} darkMode={darkMode} />
+                ))}
+              </div>
+            </div>
+
           </div>
 
           {/* RIGHT SIDE: CONTENT */}
