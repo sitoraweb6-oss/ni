@@ -14,10 +14,21 @@ interface TrustedBySectionProps {
 }
 
 const uploadedFiles = [
-  "eee.webp",
-  "eter.webp",
-  "rterf.webp",
-  "werfe.webp"
+  "Black Yellow Minimalist Optic Logo.webp",
+  "Black and Orange Simple Chinese Restaurant Logo.webp",
+  "Black and Yellow Taxi Company Logo.webp",
+  "Blue Green.webp",
+  "Blue and Black.webp",
+  "Blue and White Modern Academy Logo.webp",
+  "Brown.webp",
+  "Brown Minimalist Fashion Brand Logo.webp",
+  "Farm Logo.webp",
+  "Gold and Green.webp",
+  "Green Minimalist Real Estate Logo.webp",
+  "Green and Black Modern Bold Car Center Brand Logo.webp",
+  "Maroon andogo.webp",
+  "Navy and .webp",
+  "Navy and Red Modern University Logo.webp"
 ];
 
 // Generate exactly 21 logo slots mapped to the available real files
@@ -26,7 +37,7 @@ const clientLogos = Array.from({ length: 21 }, (_, i) => {
   const filename = uploadedFiles[i % uploadedFiles.length];
   return {
     id,
-    src: `/logos/${filename}`,
+    src: `/logos/${encodeURIComponent(filename)}`,
     alt: `Sitora Web Client ${id}`
   };
 });
@@ -36,7 +47,8 @@ const column2Logos = clientLogos.slice(7, 14);
 const column3Logos = clientLogos.slice(14, 21);
 
 const LogoCard = ({ logo, darkMode }: { logo: { id: number, src: string, alt: string }, darkMode: boolean }) => {
-  const [error, setError] = useState(false);
+  // Use the first file as a guaranteed fallback if the specific one fails
+  const [imgSrc, setImgSrc] = useState(logo.src);
 
   return (
     <div 
@@ -44,19 +56,13 @@ const LogoCard = ({ logo, darkMode }: { logo: { id: number, src: string, alt: st
       style={{ height: 'var(--item-height)', paddingBottom: 'var(--gap)' }}
     >
       <div className={`group relative w-full h-full flex items-center justify-center p-2 sm:p-3 rounded-2xl border transition-all duration-300 z-10 ${darkMode ? 'bg-[#0A0A0A] border-[#D6B16B]/20 shadow-[0_0_15px_rgba(214,177,107,0.04)] hover:border-[#D6B16B]/50 hover:shadow-[0_0_25px_rgba(214,177,107,0.15)]' : 'bg-white border-[#D6B16B]/30 shadow-sm hover:border-[#D6B16B]/60 hover:shadow-[0_0_15px_rgba(214,177,107,0.1)]'}`}>
-        {!error ? (
-          <img 
-            src={logo.src} 
-            alt={logo.alt} 
-            onError={() => setError(true)}
-            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.02] relative z-20"
-            style={{ filter: 'none', opacity: 1 }}
-          />
-        ) : (
-          <div className={`w-full h-full flex items-center justify-center opacity-20 relative z-20 ${darkMode ? 'text-[#D6B16B]' : 'text-neutral-400'}`}>
-            <span className="text-[10px] font-mono font-bold tracking-widest">{logo.id.toString().padStart(2, '0')}</span>
-          </div>
-        )}
+        <img 
+          src={imgSrc} 
+          alt={logo.alt} 
+          onError={() => setImgSrc(`/logos/${encodeURIComponent(uploadedFiles[0])}`)}
+          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.02] relative z-20"
+          style={{ filter: 'none', opacity: 1 }}
+        />
       </div>
     </div>
   );
